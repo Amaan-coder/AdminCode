@@ -49,7 +49,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("delemployee/{id}")
-	public String deleteEmployeeById(@PathVariable Integer id){
+	public ResponseDto deleteEmployeeById(@PathVariable Integer id){
 		
 		return service.deleteEmployee(id);
 		

@@ -41,7 +41,7 @@ public class EmployeeService {
 		return new ResponseDto(dao.findById(Id));
 	}
 
-	public String deleteEmployee(Integer id) {
+	public ResponseDto deleteEmployee(Integer id) {
 
 		String results;
 		try {
@@ -50,6 +50,6 @@ public class EmployeeService {
 		} catch (Exception e) {
 			results = "Not Deleted";
 		}
-		return results;
+		return new ResponseDto(results);
 	}
 }
