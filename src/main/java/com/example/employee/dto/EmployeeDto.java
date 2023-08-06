@@ -1,6 +1,8 @@
 package com.example.employee.dto;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -9,6 +11,7 @@ import jakarta.persistence.Table;
 public class EmployeeDto {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
 	private String firstName;
@@ -26,10 +29,10 @@ public class EmployeeDto {
 	
 	
 	
-	public EmployeeDto(Integer id, String firstName, String lastName, String email, String company, Long phone,
+	public EmployeeDto( String firstName, String lastName, String email, String company, Long phone,
 			String addressLine1, String addressLine2, Integer postalCode, String city, String state) {
 		super();
-		this.id = id;
+		
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
