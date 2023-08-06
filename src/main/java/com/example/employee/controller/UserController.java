@@ -1,6 +1,7 @@
 package com.example.employee.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,12 +29,16 @@ public class UserController {
 		return userService.login(user);
 	}
 	
-	
-	
+
 	@PostMapping("/signup")
 	public ResponseDto signup(@RequestBody UserDto userDto) {
-
 		return userService.signup(userDto);
 
+	}
+	
+	@GetMapping("/userlist")
+	public ResponseDto userList() {
+		
+		return userService.fetchUserList();
 	}
 }

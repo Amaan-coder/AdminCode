@@ -63,5 +63,11 @@ public class UserService {
     return new ResponseDto(outMessage);
 }
 
+	public ResponseDto fetchUserList() {
+		
+		
+		return new ResponseDto(dao.findAll());
+	}
+
 	
 }
