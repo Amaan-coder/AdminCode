@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="Employee")
+@Table(name="EmployeeList")
 public class EmployeeDto {
 	
 	@Id
@@ -26,36 +26,6 @@ public class EmployeeDto {
 	private String state;
 	
 	
-	
-	
-	
-	public EmployeeDto( String firstName, String lastName, String email, String company, Long phone,
-			String addressLine1, String addressLine2, Integer postalCode, String city, String state) {
-		super();
-		
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.company = company;
-		this.phone = phone;
-		this.addressLine1 = addressLine1;
-		this.addressLine2 = addressLine2;
-		this.postalCode = postalCode;
-		this.city = city;
-		this.state = state;
-	}
-	
-	public EmployeeDto() {
-		
-			}
-	
-	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
 	public String getFirstName() {
 		return firstName;
 	}
@@ -115,6 +85,12 @@ public class EmployeeDto {
 	}
 	public void setState(String state) {
 		this.state = state;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 	

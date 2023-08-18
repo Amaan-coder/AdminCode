@@ -1,11 +1,19 @@
 package com.example.employee.service;
 
+import java.util.ArrayList;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import com.example.employee.dto.ResponseDto;
+import com.example.employee.dto.RoleDto;
 import com.example.employee.dto.UserDto;
 import com.example.employee.exceptions.ValidationFailedException;
+import com.example.employee.repository.RoleRepo;
 import com.example.employee.repository.UserRepository;
 
 @Service
@@ -14,60 +22,92 @@ public class UserService {
 	@Autowired
 	private UserRepository dao;
 
+	@Autowired
+	private RoleRepo roleDao;
+
+	public void initRolesandUser() {
+
+		// Admin Role
+		RoleDto adminRole = new RoleDto();
+		adminRole.setRole("admin");
+		adminRole.setRoleDes("Admin role");
+		roleDao.save(adminRole);
+		// UserRole
+		RoleDto userRole = new RoleDto();
+		userRole.setRole("user");
+		userRole.setRoleDes("Default role for newly created record");
+		roleDao.save(userRole);
+		// Admin Information
+		UserDto adminUser = new UserDto();
+		adminUser.setFullName("Mohd Amaan");
+		adminUser.setEmail("amaan@tcs.com");
+		adminUser.setPassword("root");
+		adminUser.setConfirmPassword("root");
+		List<RoleDto> adminRoles = new ArrayList<>();
+		adminRoles.add(adminRole);
+		adminUser.setRole(adminRoles);
+		dao.save(adminUser);
+
+	}
+
+	/// Signup
 	public ResponseDto signup(UserDto userDto) {
 		String outMessage = null;
+
+		RoleDto role = roleDao.findById("user").get();
+
+		List<RoleDto> userRoles = new ArrayList<>();
+		userRoles.add(role);
+		userDto.setRole(userRoles);
 		if (userDto.getEmail() != null && userDto.getFullName() != null && userDto.getPassword() != null
-				&& userDto.getConfirmPassword() != null && userDto.getRole()!=null) {
+				&& userDto.getConfirmPassword() != null) {
+			dao.save(userDto);
+			outMessage = "User Signup Successful";
+		} else {
+			throw new ValidationFailedException("Something went wrong");
+		}
+		return new ResponseDto(outMessage);
+	}
 
-			if (dao.findByEmail(userDto.getEmail()) != null) {
-				outMessage = "Email already exists";
-				throw new ValidationFailedException(outMessage);
-			}
+	// Login
+	public ResponseDto login(UserDto userDto) {
 
-			if (userDto.getPassword().equals(userDto.getConfirmPassword())) {
-				dao.save(userDto);
-				outMessage = "Signup Sucessfully";
+		String outMessage = "Login Failed";
 
+		UserDto retrievedUser = dao.findByEmail(userDto.getEmail());
+
+		if (retrievedUser!=null) {
+
+			if (retrievedUser.getPassword().equals(userDto.getPassword())
+					&& retrievedUser.getEmail().equals(userDto.getEmail())) {
+
+				List<RoleDto> roles = retrievedUser.getRole();
+
+				if (roles.stream().anyMatch(role -> "admin".equals(role.getRole()))) {
+
+					outMessage = "Admin Login Successful";
+
+				} else if (roles.stream().anyMatch(role -> "user".equals(role.getRole()))) {
+
+					outMessage = "User Login Successful";
+
+				}
+
+			} else {
+				throw new ValidationFailedException("Incorrect username or password");
 			}
-			else {
-				throw new ValidationFailedException("Password doesnot match");
-			}
+		}
+		else {
+			throw new ValidationFailedException("User not found");
 		}
 
 		return new ResponseDto(outMessage);
 	}
 
-	public ResponseDto login(UserDto userDto) {
-    String outMessage = null;
-
-    UserDto user = dao.findByEmail(userDto.getEmail());
-    
-    System.out.println("User Details "+user);
-    
-    if (user != null && user.getPassword().equals(userDto.getPassword())) {
-        String role = user.getRole();
-        
-        if ("admin".equals(role)|| "Admin".equals(role)) {
-            outMessage = "Admin Login Successful";
-            
-        } else if ("user".equals(role)) {
-            outMessage = "User Login Successful";
-            
-        } else {
-            throw new ValidationFailedException("Invalid Role"); // Handle unrecognized roles if needed
-        }
-    } else {
-        throw new ValidationFailedException("Bad Credentials");
-    }
-
-    return new ResponseDto(outMessage);
-}
-
+	// Get All user List
 	public ResponseDto fetchUserList() {
-		
-		
+
 		return new ResponseDto(dao.findAll());
 	}
 
-	
 }

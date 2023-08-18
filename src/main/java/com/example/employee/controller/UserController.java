@@ -1,6 +1,7 @@
 package com.example.employee.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.ResponseEntity;
@@ -14,7 +15,9 @@ import com.example.employee.dto.ResponseDto;
 import com.example.employee.dto.UserDto;
 import com.example.employee.service.UserService;
 
-//UserController.java
+import jakarta.annotation.PostConstruct;
+
+@CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -23,6 +26,10 @@ public class UserController {
 	private UserService userService;
 
 	
+	@PostConstruct
+	public void initRolesAndUser() {
+		userService.initRolesandUser();
+	}
 	
 	@PostMapping("/login")
 	public ResponseDto login(@RequestBody UserDto user) {

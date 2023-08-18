@@ -13,6 +13,8 @@ import com.example.employee.dto.EmployeeDto;
 import com.example.employee.dto.ResponseDto;
 import com.example.employee.service.EmployeeService;
 
+import jakarta.annotation.PostConstruct;
+
 @CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 @RequestMapping("/employee")
@@ -21,8 +23,14 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService service;
 
+	@PostConstruct
+	public void initValues() {
+		
+		 service.initValues();
+	}
+	
+	
 	@GetMapping("/employeelist")
-
 	public ResponseDto fetchEmployeeList() {
 
 		return service.fetchEmployee();

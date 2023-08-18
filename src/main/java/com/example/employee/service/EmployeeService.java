@@ -51,4 +51,22 @@ public class EmployeeService {
 		}
 		return new ResponseDto(results);
 	}
+
+	public void initValues() {
+			
+		EmployeeDto emp = new EmployeeDto();
+		emp.setAddressLine1("Khadra");
+		emp.setAddressLine2("Sitapur Road");
+		emp.setCity("Lucknow");
+		emp.setCompany("TCS");
+		emp.setEmail("amaan@tcs.com");
+		emp.setFirstName("Mohd");
+		emp.setLastName("Amaan");
+		emp.setPhone((long) 790537846);
+		emp.setPostalCode(229090);
+		emp.setState("Uttar Pradesh");
+		
+		dao.save(emp);
+	
+	}
 }
