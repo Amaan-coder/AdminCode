@@ -59,12 +59,23 @@ public class UserService {
 		List<RoleDto> userRoles = new ArrayList<>();
 		userRoles.add(role);
 		userDto.setRole(userRoles);
+		
+		UserDto retrievedUser = dao.findByEmail(userDto.getEmail());
+		
+		if(retrievedUser.getEmail().equals(userDto.getEmail()))
+		{
+			throw new ValidationFailedException("User already exist");
+		}
+		else {
 		if (userDto.getEmail() != null && userDto.getFullName() != null && userDto.getPassword() != null
 				&& userDto.getConfirmPassword() != null) {
 			dao.save(userDto);
 			outMessage = "User Signup Successful";
 		} else {
 			throw new ValidationFailedException("Something went wrong");
+		}
+		
+		
 		}
 		return new ResponseDto(outMessage);
 	}
