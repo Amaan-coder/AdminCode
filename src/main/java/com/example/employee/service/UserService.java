@@ -52,34 +52,33 @@ public class UserService {
 
 	/// Signup
 	public ResponseDto signup(UserDto userDto) {
-		String outMessage = null;
+    String outMessage = null;
 
-		RoleDto role = roleDao.findById("user").get();
+    RoleDto role = roleDao.findById("user").get();
 
-		List<RoleDto> userRoles = new ArrayList<>();
-		userRoles.add(role);
-		userDto.setRole(userRoles);
-		
-		UserDto retrievedUser = dao.findByEmail(userDto.getEmail());
-		
-		if(retrievedUser.getEmail().equals(userDto.getEmail()))
-		{
-			throw new ValidationFailedException("User already exist");
-		}
-		else {
-		if (userDto.getEmail() != null && userDto.getFullName() != null && userDto.getPassword() != null
-				&& userDto.getConfirmPassword() != null) {
-			dao.save(userDto);
-			outMessage = "User Signup Successful";
-		} else {
-			throw new ValidationFailedException("Something went wrong");
-		}
-		
-		
-		}
-		return new ResponseDto(outMessage);
-	}
+    List<RoleDto> userRoles = new ArrayList<>();
+    userRoles.add(role);
+    userDto.setRole(userRoles);
 
+    UserDto retrievedUser = dao.findByEmail(userDto.getEmail());
+
+    if (retrievedUser != null) {
+        throw new ValidationFailedException("User already exists");
+    } else {
+        if (userDto.getEmail() != null && userDto.getFullName() != null && userDto.getPassword() != null
+                && userDto.getConfirmPassword() != null) {
+            if (userDto.getPassword().equals(userDto.getConfirmPassword())) {
+                dao.save(userDto);
+                outMessage = "User Signup Successful";
+            } else {
+                throw new ValidationFailedException("Password doesn't match");
+            }
+        } else {
+            throw new ValidationFailedException("All fields are mandatory");
+        }
+    }
+    return new ResponseDto(outMessage);
+}
 	// Login
 	public ResponseDto login(UserDto userDto) {
 
@@ -111,8 +110,8 @@ public class UserService {
 		else {
 			throw new ValidationFailedException("User not found");
 		}
-
-		return new ResponseDto(outMessage);
+		UserDto user = dao.findByEmail(userDto.getEmail());
+		return new ResponseDto(user);
 	}
 
 	// Get All user List

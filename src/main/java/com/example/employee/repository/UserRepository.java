@@ -11,5 +11,5 @@ import com.example.employee.dto.UserDto;
 public interface UserRepository<RoleDto> extends CrudRepository<UserDto, String> {
 
     UserDto findByEmail(String email);
-
+    
 }
