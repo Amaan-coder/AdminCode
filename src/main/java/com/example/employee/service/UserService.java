@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -37,8 +38,9 @@ public class UserService {
 		userRole.setRole("user");
 		userRole.setRoleDes("Default role for newly created record");
 		roleDao.save(userRole);
-		// Admin Information
+//		 Admin Information
 		UserDto adminUser = new UserDto();
+		adminUser.setUserId(10);
 		adminUser.setFullName("Mohd Amaan");
 		adminUser.setEmail("amaan@tcs.com");
 		adminUser.setPassword("root");
@@ -119,5 +121,18 @@ public class UserService {
 
 		return new ResponseDto(dao.findAll());
 	}
+
+	public List<String> fetchRoleIdsByUserId(String userId) {
+        Optional<UserDto> userOptional = dao.findById(userId);
+
+        if (userOptional.isPresent()) {
+            UserDto user = userOptional.get();
+            List<RoleDto> roles = user.getRole();
+            List<String> roleIds = roles.stream().map(RoleDto::getRole).collect(Collectors.toList());
+            return roleIds;
+        } else {
+            throw new ValidationFailedException("User with ID " + userId + " not found.");
+        }
+    }
 
 }
