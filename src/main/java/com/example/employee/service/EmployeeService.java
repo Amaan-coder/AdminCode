@@ -1,6 +1,8 @@
 package com.example.employee.service;
 
 
+import java.util.List;
+
 //import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.employee.dto.EmployeeDto;
 import com.example.employee.dto.ResponseDto;
+import com.example.employee.exceptions.ValidationFailedException;
 import com.example.employee.repository.EmployeeRepo;
 
 @Service
@@ -23,16 +26,27 @@ public class EmployeeService {
 	}
 
 	public ResponseDto saveEmployee(EmployeeDto employee) {
-		String outMessage;
-		try {
+	
+		
+		String email = null;
+		String name = null;
+		List<EmployeeDto> employee1 = dao.findAll();
+		for(EmployeeDto user : employee1) {
+			email = user.getEmail();
+			name = user.getFirstName().concat(user.getLastName());
+		}
+		if(employee.getEmail().equals(email)) {
+			throw new ValidationFailedException("Employee already exist");
+		}
+		if(employee.getFirstName().concat(employee.getLastName()).equals(name)) {
+			throw new ValidationFailedException("Name already exist");
+		}
+			String outMessage;
+		
 			dao.save(employee);
 
 			outMessage = "Employee Added Sucessfully";
-		} catch (Exception e) {
-
-			outMessage = "Not Employee Added Sucessfully";
-		}
-
+		
 		return new ResponseDto(outMessage);
 	}
 
