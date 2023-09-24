@@ -40,14 +40,12 @@ public class EmployeeController {
 	public ResponseDto createEmployee(@RequestBody EmployeeDto employee) {
 
 		return service.saveEmployee(employee);
-
 	}
 
 	@GetMapping("employee/{id}")
 	public ResponseDto fetchEmployeeById(@PathVariable Integer id) {
 
 		return service.fetchEmployeeById(id);
-
 	}
 
 	@GetMapping("delemployee/{id}")
@@ -56,5 +54,9 @@ public class EmployeeController {
 		return service.deleteEmployee(id);
 
 	}
-
+	@PostMapping("updateemployee/{id}")
+	public ResponseDto updateEmployeeById(@PathVariable Integer id, @RequestBody EmployeeDto updatedEmployee) {
+		
+		return service.updateEmployee(id, updatedEmployee);
+	}
 }

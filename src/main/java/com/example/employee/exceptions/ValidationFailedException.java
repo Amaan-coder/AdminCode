@@ -2,9 +2,6 @@ package com.example.employee.exceptions;
 
 public class ValidationFailedException extends RuntimeException {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private int status;
 

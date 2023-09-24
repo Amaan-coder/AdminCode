@@ -83,4 +83,47 @@ public class EmployeeService {
 		dao.save(emp);
 	
 	}
+
+	public ResponseDto updateEmployee(Integer id, EmployeeDto updatedEmployee) {
+		
+		EmployeeDto existingEmployee = dao.findById(id).orElse(null);
+
+        // Update the existing employee's properties based on the provided data
+        if (updatedEmployee.getFirstName() != null) {
+            existingEmployee.setFirstName(updatedEmployee.getFirstName());
+        }
+        if (updatedEmployee.getLastName() != null) {
+            existingEmployee.setLastName(updatedEmployee.getLastName());
+        }
+        if (updatedEmployee.getEmail() != null) {
+            existingEmployee.setEmail(updatedEmployee.getEmail());
+        }
+        if (updatedEmployee.getCompany() != null) {
+            existingEmployee.setCompany(updatedEmployee.getCompany());
+        }
+        if (updatedEmployee.getPhone() != null) {
+            existingEmployee.setPhone(updatedEmployee.getPhone());
+        }
+        if (updatedEmployee.getAddressLine1() != null) {
+            existingEmployee.setAddressLine1(updatedEmployee.getAddressLine1());
+        }
+        if (updatedEmployee.getAddressLine2() != null) {
+            existingEmployee.setAddressLine2(updatedEmployee.getAddressLine2());
+        }
+        if (updatedEmployee.getPostalCode() != null) {
+            existingEmployee.setPostalCode(updatedEmployee.getPostalCode());
+        }
+        if (updatedEmployee.getCity() != null) {
+            existingEmployee.setCity(updatedEmployee.getCity());
+        }
+        if (updatedEmployee.getState() != null) {
+            existingEmployee.setState(updatedEmployee.getState());
+        }
+
+        // Save the updated employee
+        dao.save(existingEmployee);
+		String results = "Employee Updated Successfully";
+		return new ResponseDto(results);
+		
+	}
 }
